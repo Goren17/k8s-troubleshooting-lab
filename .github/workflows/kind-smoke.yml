@@ -1,0 +1,42 @@
+name: Kind Smoke Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: ${{ matrix.scenario }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - crashloop-bad-env
+          - service-selector-mismatch
+          - readiness-probe-failure
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.12.0
+        with:
+          cluster_name: k8s-troubleshooting-lab
+          wait: 120s
+
+      - name: Run scenario smoke test
+        run: ./scripts/smoke-test-scenario.sh "${{ matrix.scenario }}"
+
+      - name: Dump cluster state on failure
+        if: failure()
+        run: |
+          kubectl get all -A
+          kubectl get events -A --sort-by='.lastTimestamp'
+

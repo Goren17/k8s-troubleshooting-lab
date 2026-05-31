@@ -42,6 +42,7 @@ k8s-troubleshooting-lab/
 │   ├── setup-kind-cluster.sh
 │   ├── apply-scenario.sh
 │   ├── check-scenario.sh
+│   ├── smoke-test-scenario.sh
 │   ├── validate-scripts.sh
 │   ├── validate-scenarios.sh
 │   └── reset-lab.sh
@@ -133,6 +134,14 @@ Validate the repo contract locally:
 ./scripts/validate-scenarios.sh
 ```
 
+Run a real in-cluster smoke test for a stable scenario:
+
+```bash
+./scripts/smoke-test-scenario.sh crashloop-bad-env
+./scripts/smoke-test-scenario.sh service-selector-mismatch
+./scripts/smoke-test-scenario.sh readiness-probe-failure
+```
+
 ## Continuous Integration
 
 GitHub Actions validates this repo on every push and pull request:
@@ -142,6 +151,7 @@ GitHub Actions validates this repo on every push and pull request:
 - Scenario structure and required troubleshooting headings.
 - YAML parsing for every manifest.
 - Kubernetes schema validation with kubeconform.
+- Kind smoke tests for stable broken-then-fixed scenario behavior.
 
 ## Portfolio Reading Path
 

@@ -22,6 +22,13 @@ required_scenarios=(
 
 failures=0
 
+echo "Validating scenario contract:"
+echo "- required scenario directories exist"
+echo "- each scenario has README.md, broken/, and fixed/"
+echo "- each README contains the required troubleshooting headings"
+echo "- each broken/ and fixed/ directory contains YAML manifests"
+echo
+
 check_file_exists() {
   local path="$1"
 

@@ -31,6 +31,7 @@ jobs:
 
       - name: Parse YAML manifests
         run: |
+          echo "Parsing every Kubernetes manifest under scenarios/ to catch malformed YAML before schema validation."
           python3 - <<'PY'
           import pathlib
           import yaml
@@ -42,6 +43,11 @@ jobs:
 
           print(f"parsed {len(files)} yaml files")
           PY
+
+      - name: Explain Kubernetes schema validation
+        run: |
+          echo "Validating Kubernetes object schemas with kubeconform."
+          echo "CRDs are allowed to skip schema checks because ExternalSecret and SecretStore schemas are not bundled with Kubernetes."
 
       - name: Validate Kubernetes schemas
         uses: docker://ghcr.io/yannh/kubeconform:v0.7.0

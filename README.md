@@ -39,6 +39,7 @@ k8s-troubleshooting-lab/
 │   └── pod-oomkilled-limits/
 ├── solutions/
 ├── scripts/
+│   ├── setup-kind-cluster.sh
 │   ├── apply-scenario.sh
 │   ├── check-scenario.sh
 │   ├── validate-scripts.sh
@@ -57,12 +58,41 @@ fixed/
 
 ## Requirements
 
-- A Kubernetes cluster such as kind, minikube, Docker Desktop, EKS, GKE, or AKS.
+- Recommended: kind.
+- Alternative: minikube, Docker Desktop, EKS, GKE, or AKS.
 - `kubectl` configured against the target cluster.
+- Docker, when using kind locally.
 - Optional: an ingress controller for the ingress scenario.
 - Optional: External Secrets Operator for the external secret scenario.
+- Optional: metrics-server for richer OOMKilled/resource visibility.
 
 The default namespace is `troubleshooting-lab`.
+
+## Local Cluster Setup
+
+The recommended local runtime is kind because it is fast to reset, easy to reproduce, and works well for CI-style Kubernetes testing.
+
+Create the lab cluster:
+
+```bash
+./scripts/setup-kind-cluster.sh
+```
+
+Create the lab cluster with all optional add-ons:
+
+```bash
+./scripts/setup-kind-cluster.sh --all-addons
+```
+
+Install only the add-ons needed for specific scenarios:
+
+```bash
+./scripts/setup-kind-cluster.sh --with-ingress
+./scripts/setup-kind-cluster.sh --with-external-secrets
+./scripts/setup-kind-cluster.sh --with-metrics-server
+```
+
+The setup script creates or reuses one kind cluster and one namespace. It does not apply any scenario; use `apply-scenario.sh` for that.
 
 ## Usage
 

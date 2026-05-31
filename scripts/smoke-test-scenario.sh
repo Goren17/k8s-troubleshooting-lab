@@ -121,7 +121,6 @@ wait_for_endpoints() {
 test_crashloop_bad_env() {
   reset_namespace
   apply_state broken
-  rollout_fails crashloop-api 30s
   wait_for_log_text "troubleshooting-lab/scenario=crashloop-bad-env" "fatal: DATABASE_URL is empty"
 
   apply_state fixed

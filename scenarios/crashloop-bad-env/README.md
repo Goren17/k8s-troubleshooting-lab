@@ -20,6 +20,7 @@ The platform is only reporting the restart behavior. The useful signal is inside
 kubectl get pods -n troubleshooting-lab -l troubleshooting-lab/scenario=crashloop-bad-env
 kubectl describe pod -n troubleshooting-lab -l troubleshooting-lab/scenario=crashloop-bad-env
 kubectl logs -n troubleshooting-lab -l troubleshooting-lab/scenario=crashloop-bad-env --previous
+kubectl get deploy -n troubleshooting-lab crashloop-api -o yaml
 kubectl get configmap -n troubleshooting-lab crashloop-app-config -o yaml
 ```
 
@@ -31,7 +32,7 @@ kubectl get configmap -n troubleshooting-lab crashloop-app-config -o yaml
 
 ## Root Cause
 
-The container expects `DATABASE_URL` to be a usable connection string. The broken ConfigMap sets it to an empty value, so the startup command exits with a non-zero status.
+The ConfigMap contains `DATABASE_URL`, but the broken Deployment tries to load `DATABASE_DSN` into the container's `DATABASE_URL` environment variable. Because the key is marked optional, Kubernetes starts the container instead of failing pod configuration. The app then exits during startup because `DATABASE_URL` is empty.
 
 ## Fix
 
@@ -41,7 +42,7 @@ Apply the fixed manifest:
 ./scripts/apply-scenario.sh crashloop-bad-env fixed
 ```
 
-The fixed ConfigMap provides a valid-looking `DATABASE_URL`, allowing the container to pass startup validation.
+The fixed Deployment reads the `DATABASE_URL` key from the ConfigMap, allowing the container to pass startup validation.
 
 ## Prevention
 
@@ -49,4 +50,3 @@ The fixed ConfigMap provides a valid-looking `DATABASE_URL`, allowing the contai
 - Use Helm schema, Kustomize validation, or policy-as-code for required config keys.
 - Fail with explicit startup logs instead of generic process exits.
 - Alert on restart rate, not just pod phase.
-

@@ -29,7 +29,10 @@ spec:
               fi
               echo "connected to $DATABASE_URL"
               sleep 3600
-          envFrom:
-            - configMapRef:
-                name: crashloop-app-config
-
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: crashloop-app-config
+                  key: DATABASE_DSN
+                  optional: true

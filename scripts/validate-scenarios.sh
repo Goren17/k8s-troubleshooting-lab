@@ -62,6 +62,9 @@ check_heading_exists() {
 for scenario in "${required_scenarios[@]}"; do
   scenario_dir="scenarios/$scenario"
   readme="$scenario_dir/README.md"
+  scenario_failures_before="$failures"
+
+  echo "::group::scenario/$scenario"
 
   check_dir_exists "$scenario_dir"
   check_dir_exists "$scenario_dir/broken"
@@ -81,6 +84,14 @@ for scenario in "${required_scenarios[@]}"; do
   if [[ -d "$scenario_dir/fixed" ]]; then
     check_yaml_exists "$scenario_dir/fixed"
   fi
+
+  if [[ "$failures" -eq "$scenario_failures_before" ]]; then
+    echo "scenario passed: $scenario"
+  else
+    echo "scenario failed: $scenario" >&2
+  fi
+
+  echo "::endgroup::"
 done
 
 actual_count="$(find scenarios -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')"
@@ -97,4 +108,3 @@ if [[ "$failures" -gt 0 ]]; then
 fi
 
 echo "scenario validation passed"
-

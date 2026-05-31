@@ -17,8 +17,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Check shell scripts
-        run: bash -n scripts/*.sh
+      - name: Install shell tooling
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Validate shell scripts
+        run: ./scripts/validate-scripts.sh
 
       - name: Validate scenario contract
         run: ./scripts/validate-scenarios.sh

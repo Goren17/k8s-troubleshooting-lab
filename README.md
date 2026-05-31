@@ -41,6 +41,7 @@ k8s-troubleshooting-lab/
 ├── scripts/
 │   ├── apply-scenario.sh
 │   ├── check-scenario.sh
+│   ├── validate-scripts.sh
 │   ├── validate-scenarios.sh
 │   └── reset-lab.sh
 └── README.md
@@ -98,6 +99,7 @@ LAB_NAMESPACE=devops-debug ./scripts/apply-scenario.sh service-selector-mismatch
 Validate the repo contract locally:
 
 ```bash
+./scripts/validate-scripts.sh
 ./scripts/validate-scenarios.sh
 ```
 
@@ -106,6 +108,7 @@ Validate the repo contract locally:
 GitHub Actions validates this repo on every push and pull request:
 
 - Shell script syntax.
+- Script executable bit, shebang, syntax, and ShellCheck output when available.
 - Scenario structure and required troubleshooting headings.
 - YAML parsing for every manifest.
 - Kubernetes schema validation with kubeconform.

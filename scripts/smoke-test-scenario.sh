@@ -88,13 +88,13 @@ wait_for_log_text() {
   return 1
 }
 
-assert_endpoints_empty() {
+assert_no_ready_endpoints() {
   local service="$1"
-  local subsets
+  local ready_addresses
 
-  subsets="$(kubectl get endpoints "$service" -n "$LAB_NAMESPACE" -o jsonpath='{.subsets}' 2>/dev/null || true)"
-  if [[ -n "$subsets" ]]; then
-    echo "expected no endpoints for service/$service, found: $subsets" >&2
+  ready_addresses="$(kubectl get endpoints "$service" -n "$LAB_NAMESPACE" -o jsonpath='{.subsets[*].addresses}' 2>/dev/null || true)"
+  if [[ -n "$ready_addresses" ]]; then
+    echo "expected no ready endpoints for service/$service, found: $ready_addresses" >&2
     return 1
   fi
 }
@@ -133,7 +133,7 @@ test_service_selector_mismatch() {
   reset_namespace
   apply_state broken
   rollout_succeeds payments-api
-  assert_endpoints_empty selector-demo
+  assert_no_ready_endpoints selector-demo
 
   apply_state fixed
   wait_for_endpoints selector-demo
@@ -143,7 +143,7 @@ test_readiness_probe_failure() {
   reset_namespace
   apply_state broken
   rollout_fails readiness-demo 30s
-  assert_endpoints_empty readiness-demo
+  assert_no_ready_endpoints readiness-demo
 
   apply_state fixed
   rollout_succeeds readiness-demo
@@ -166,4 +166,3 @@ case "$SCENARIO" in
 esac
 
 echo "smoke test passed: $SCENARIO"
-

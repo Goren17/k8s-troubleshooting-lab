@@ -1,5 +1,7 @@
 # Kubernetes Troubleshooting Lab
 
+[![CI](https://github.com/Goren17/k8s-troubleshooting-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Goren17/k8s-troubleshooting-lab/actions/workflows/ci.yml)
+
 This repo is a scenario-based Kubernetes lab for debugging when the platform gives you a symptom that points in the wrong direction.
 
 Each scenario starts from a broken workload, walks through the commands that separate noise from signal, identifies the root cause, applies a fix, and documents how to prevent the failure from coming back.
@@ -39,6 +41,7 @@ k8s-troubleshooting-lab/
 ├── scripts/
 │   ├── apply-scenario.sh
 │   ├── check-scenario.sh
+│   ├── validate-scenarios.sh
 │   └── reset-lab.sh
 └── README.md
 ```
@@ -92,6 +95,21 @@ Use a different namespace:
 LAB_NAMESPACE=devops-debug ./scripts/apply-scenario.sh service-selector-mismatch
 ```
 
+Validate the repo contract locally:
+
+```bash
+./scripts/validate-scenarios.sh
+```
+
+## Continuous Integration
+
+GitHub Actions validates this repo on every push and pull request:
+
+- Shell script syntax.
+- Scenario structure and required troubleshooting headings.
+- YAML parsing for every manifest.
+- Kubernetes schema validation with kubeconform.
+
 ## Portfolio Reading Path
 
 If you are reviewing this as a portfolio project, start with the scenario READMEs rather than the YAML. The value is in the debugging path:
@@ -101,4 +119,3 @@ If you are reviewing this as a portfolio project, start with the scenario README
 3. Which commands expose the useful signal.
 4. What the root cause actually is.
 5. How the fix and prevention differ.
-

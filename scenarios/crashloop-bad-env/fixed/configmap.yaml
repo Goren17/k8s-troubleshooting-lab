@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crashloop-app-config
+  labels:
+    troubleshooting-lab/scenario: crashloop-bad-env
+data:
+  DATABASE_URL: "postgres://app:example@postgres.default.svc.cluster.local:5432/app"
+

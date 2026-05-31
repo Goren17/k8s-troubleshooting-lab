@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rewrite-demo
+  labels:
+    troubleshooting-lab/scenario: ingress-path-rewrite-bug
+spec:
+  selector:
+    app: rewrite-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+

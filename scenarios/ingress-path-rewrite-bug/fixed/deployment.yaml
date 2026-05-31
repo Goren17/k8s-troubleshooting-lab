@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rewrite-demo
+  labels:
+    app: rewrite-demo
+    troubleshooting-lab/scenario: ingress-path-rewrite-bug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rewrite-demo
+  template:
+    metadata:
+      labels:
+        app: rewrite-demo
+        troubleshooting-lab/scenario: ingress-path-rewrite-bug
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+

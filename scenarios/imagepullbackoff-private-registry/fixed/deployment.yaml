@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-registry-api
+  labels:
+    app: private-registry-api
+    troubleshooting-lab/scenario: imagepullbackoff-private-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: private-registry-api
+  template:
+    metadata:
+      labels:
+        app: private-registry-api
+        troubleshooting-lab/scenario: imagepullbackoff-private-registry
+    spec:
+      serviceAccountName: private-registry-runner
+      imagePullSecrets:
+        - name: private-registry-credentials
+      containers:
+        - name: api
+          image: registry.example.com/platform/private-api:1.0.0
+          ports:
+            - containerPort: 8080
+

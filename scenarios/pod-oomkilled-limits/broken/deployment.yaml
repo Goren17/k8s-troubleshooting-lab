@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-api
+  labels:
+    app: memory-api
+    troubleshooting-lab/scenario: pod-oomkilled-limits
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memory-api
+  template:
+    metadata:
+      labels:
+        app: memory-api
+        troubleshooting-lab/scenario: pod-oomkilled-limits
+    spec:
+      containers:
+        - name: api
+          image: python:3.12-alpine
+          command:
+            - python
+            - -c
+            - |
+              import time
+              print("allocating memory")
+              block = bytearray(180 * 1024 * 1024)
+              print("allocated", len(block))
+              time.sleep(3600)
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 25m
+            limits:
+              memory: 64Mi
+              cpu: 100m
+

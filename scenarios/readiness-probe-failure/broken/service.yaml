@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: readiness-demo
+  labels:
+    troubleshooting-lab/scenario: readiness-probe-failure
+spec:
+  selector:
+    app: readiness-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+

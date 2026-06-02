@@ -40,6 +40,7 @@ k8s-troubleshooting-lab/
 ├── solutions/
 ├── scripts/
 │   ├── setup-kind-cluster.sh
+│   ├── delete-kind-cluster.sh
 │   ├── apply-scenario.sh
 │   ├── check-scenario.sh
 │   ├── smoke-test-scenario.sh
@@ -94,6 +95,12 @@ Install only the add-ons needed for specific scenarios:
 ```
 
 The setup script creates or reuses one kind cluster and one namespace. It does not apply any scenario; use `apply-scenario.sh` for that.
+
+Delete the kind cluster:
+
+```bash
+./scripts/delete-kind-cluster.sh
+```
 
 ## Usage
 
